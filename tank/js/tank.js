@@ -349,9 +349,9 @@ function Unit(x, y, w, h, img, dir, type, r, speed){
 	this.index = unitIndex ++;				//唯一编号，用于区分每个对象
 	this.hero = parseInt(Math.random()*100) % 3 == 0;//是否为英雄级别
 	if ( this.hero && this.type == "D" ){
-		this.speed = 3;//敌方移动速度
-		this.level = 2;//地方杀伤力
-		this.protect = 1;//敌方防御
+		this.speed = 2;//敌方移动速度
+		this.level = 1;//地方杀伤力
+		this.protect = 0;//敌方防御
 		this.src = imgdir + "/dD.gif";
 	}
 	return this;
