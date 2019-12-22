@@ -27,8 +27,7 @@ var gameState = 0;	//游戏状态 0-准备，1激战，2暂停，3胜利，4失�
 var stat = ["准备战斗", "激战中", "暂停", "胜利", "一败涂地",  "等待复活", "等死"];
 var tempState = 0;	//暂停前的状态记录，以便恢复
 
-var gameTime = 359;	//游戏总时间
-var gameTimer = null;//倒计时定时器
+
 var pauseTimer = null;//暂停提示定时器
 var pauseMsg = false;	//是否显示文字的开关
 var startMsg = false;	//是否显示开始游戏的开关
@@ -142,25 +141,6 @@ function paintBackground(ctx){
 		
 		ty += 20;
 		
-		if ( gameState > 0  ) {
-			if ( gameTime >= 0 ) {
-				if ( gameState != 3 && gameState != 4 ) {
-					ctx.font = "20px 宋体";
-					tx = canvas.width - 160;
-					ty = canvas.height - 20;
-					ctx.fillStyle = gameTime < 30 ? "RED":"#1F0";
-					ctx.fillText("剩余时间: " , tx, ty);
-					ctx.font = "21px Console";
-					tx += 95;
-					ctx.fillText(gameTime, tx, ty);
-				}
-			} else {
-				gameState = 4;
-				tankme.life = 0;
-				command.life = 0;
-				clearInterval(gameTimer);
-			}
-		}
 	}
 }
 
@@ -473,7 +453,6 @@ function hited(unit, target){
 				tankme.life = 0;
 				relifeCount = 0;
 				
-				clearInterval(gameTimer);
 				setTimeout(function(){
 					
 				}, 100);
@@ -826,7 +805,7 @@ function init() {
 			if ( dieCount == enemy.length ){
 				if ( gameState != 4 ){
 					gameState = 3;
-					clearInterval(gameTimer);
+				
 					clearInterval(mainTimer);
 				}
 				return;
