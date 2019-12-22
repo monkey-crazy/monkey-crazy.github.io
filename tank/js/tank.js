@@ -23,8 +23,8 @@ var homelife = 100.0;	//指挥部墙的最高生命值
 var dieCount = 0;	//被歼灭的敌军总数量
 var relifeCount = 5;//我方可以复活的机会次数
 
-var gameState = 0;	//游戏状态 0-准备，1激战，2暂停，3胜利，4失败，5被冰冻，6冰冻敌军，7我方坦克死亡但可复活，8我方坦克死亡且不能复活
-var stat = ["准备战斗", "激战中", "暂停", "胜利", "一败涂地", "被冰冻", "冰冻敌军", "等待复活", "等死"];
+var gameState = 0;	//游戏状态 0-准备，1激战，2暂停，3胜利，4失败，7我方坦克死亡但可复活，8我方坦克死亡且不能复活
+var stat = ["准备战斗", "激战中", "暂停", "胜利", "一败涂地",  "等待复活", "等死"];
 var tempState = 0;	//暂停前的状态记录，以便恢复
 
 var gameTime = 359;	//游戏总时间
@@ -92,6 +92,8 @@ Stage.prototype.render = function() {
 	}
 	loop();
 };
+
+
 
 // 从存储器中删除某个元素
 Stage.prototype.remove = function(obj) {
@@ -349,9 +351,9 @@ function Unit(x, y, w, h, img, dir, type, r, speed){
 	this.index = unitIndex ++;				//唯一编号，用于区分每个对象
 	this.hero = parseInt(Math.random()*100) % 3 == 0;//是否为英雄级别
 	if ( this.hero && this.type == "D" ){
-		this.speed = 2;//敌方移动速度
-		this.level = 1;//地方杀伤力
-		this.protect = 0;//敌方防御
+		this.speed = 3;//敌方移动速度
+		this.level = 2;//地方杀伤力
+		this.protect = 1;//敌方防御
 		this.src = imgdir + "/dD.gif";
 	}
 	return this;
@@ -435,9 +437,7 @@ function checkHit(unit){
 		if ( allUnit[i].life <= 0 ){
 			continue;						
 		}
-		if ( unit.type == "W" && allUnit[i].type == "P" && allUnit[i].img == 10 ) {
-			continue;				//我方坦克拒绝与地雷碰撞
-		}
+		
 		if ( unit.type == "D" || unit.type == "W" ){
 			if ( unit.index == allUnit[i].index ){
 				continue;			//坦克移动时，自己与自己不考虑碰撞检查
@@ -445,9 +445,6 @@ function checkHit(unit){
 		}
 		if ( unit.type == "MD" && allUnit[i].type == "D" || unit.type == "MW" && allUnit[i].type == "W") {
 			continue;				//子弹和它的发射者没必要检查碰撞
-		}
-		if ( ( unit.type == "MD" || unit.type == "MW" ) && allUnit[i].type == "P"){
-			continue;				//子弹和道具没必要检查碰撞
 		}
 		if ( hitForRectangle(unit, allUnit[i])) {
 			hited(unit, allUnit[i]);
@@ -690,7 +687,6 @@ function buildEnemy(count){
 		enemy.push(e);
 		allUnit.push(e);
 	}
-	aud_newenemy.play();
 }
 
 /**
